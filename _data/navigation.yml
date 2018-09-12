@@ -13,8 +13,6 @@ main:
     url: about
   - title: Sitemap
     url: sitemap
-footer:
-  - title: Source
 
 # bottom:
 #   - title: bot1
