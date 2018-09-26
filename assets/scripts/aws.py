@@ -78,8 +78,8 @@ try:
                                                 'Values': ['available']
                                     }])
     sorted_obj = response
-    sorted_obj["Images"] = sorted(response["Images"], key=lambda x : x["CreationDate"])
-    #print (sorted_obj["Images"][-1]["ImageId"])
+    sorted_obj["Images"] = sorted(response["Images"], key=lambda x : x["CreationDate"], reverse=True)
+    #print (sorted_obj["Images"][0]["ImageId"])
 except ClientError as e:
     print(e)
 
@@ -127,10 +127,7 @@ except ClientError as e:
     print(e)
 
 # Stop, Terminate instances
-
 ids = [instance.id, ]
-#INSTANCESTATE = instance.state['Name']
-#print ("state " + INSTANCESTATE)
 
 # Wait for the instance to be in a running state or else stop_instance and create_snapshot wont work
 try:
@@ -140,18 +137,12 @@ except ClientError as e:
     print(e)
 
 
-#print("Instance state: " + INSTANCESTATE)
-#sys.exit("Error message")
-
-#if INSTANCESTATE == 'running':
 # try:
 #     #ec2.instances.filter(InstanceIds=ids).stop()
-#     # ec2.instances.filter(InstanceIds=ids).terminate()
+#     #ec2.instances.filter(InstanceIds=ids).terminate()
 #     #print("Instance '" + instance.id + "' terminated")
 # except ClientError as e:
 #     print(e)
-# else:
-#     print("Instance isn't in running state yet, instance state: " + INSTANCESTATE)
 
 
 # Create tags
@@ -245,7 +236,90 @@ try:
     )
     sorted_obj = response
     sorted_obj["Snapshots"] = sorted(response["Snapshots"], key=lambda k: k["StartTime"], reverse=True)
-    print ("Snapshot '" + sorted_obj["Snapshots"][0]["SnapshotId"] + "' created")
+    SNAPSHOTID = sorted_obj["Snapshots"][0]["SnapshotId"]
+    print ("Snapshot '" + SNAPSHOTID + "' created")
 except ClientError as e:
     print(e)
 
+# delete snapshot
+
+ec2 = boto3.resource('ec2')
+snapshot = ec2.Snapshot(SNAPSHOTID)
+try:
+    response = snapshot.delete(
+    )
+    print ("Snapshot " + SNAPSHOTID + " deleted")
+except ClientError as e:
+    print(e)
+
+# Amazon EBS-backed AMI
+AMINAME= 'An AMI for my server'
+
+
+ec2 = boto3.client('ec2')
+client = boto3.client('ec2')
+
+try:
+    response = client.create_image(
+            InstanceId=instance.id,
+            Name=AMINAME,
+            NoReboot=True)
+    print ("image created")
+except ClientError as e:
+    print(e)
+
+
+try:
+    response = ec2.describe_images(Owners=['self'],
+                                   Filters=[{
+                                                'Name': 'name',
+                                                'Values': [AMINAME]
+                                   }])
+    sorted_obj = response
+    sorted_obj["Images"] = sorted(response["Images"], key=lambda x : x["CreationDate"], reverse=True)
+    AMIIMAGEID= sorted_obj["Images"][0]["ImageId"]
+    print (AMIIMAGEID)
+except ClientError as e:
+    print(e)
+
+
+ec2 = boto3.resource('ec2')
+
+# run instance from ami
+try:
+    instances = ec2.create_instances(
+        ImageId=AMIIMAGEID,
+        KeyName=KEYNAME,
+        SecurityGroups=["EC2WebSecurityGroup",],
+        InstanceType="t2.micro",
+        Placement={'AvailabilityZone': 'eu-west-3c',}, 
+        MaxCount=1,
+        MinCount=1,
+        Monitoring={
+            'Enabled': True
+        },
+        TagSpecifications=[{
+                            'ResourceType': 'volume',
+                            'Tags': [
+                                {'Key': 'cost-center',
+                            'Value': 'cc123'}
+                                    ]
+                            },
+                          ]
+        )
+    for instance in instances:
+        print("Instance '" + instance.id + "' created")
+except ClientError as e:
+    print(e)
+
+# deregister-image
+ec2 = boto3.client('ec2')
+client = boto3.client('ec2')
+
+try:
+    response = client.deregister_image(
+        ImageId=AMIIMAGEID,
+    )
+    print ("AMI " + AMIIMAGEID + " deregistered")
+except ClientError as e:
+    print(e)
