@@ -4,6 +4,7 @@ tags:
   - guacamole
   - tutorial
 ---
+{% include toc %}
 
 # Postgres
 
@@ -88,10 +89,21 @@ password: guacadmin
 
 
 ## Docker-compose
-
-
-
+```shell
+git clone git@github.com:siddou/guacamole-postgres.git
+cd guacamole-postgres
+docker run --rm guacamole/guacamole /opt/guacamole/bin/initdb.sh --postgres > sql-scripts/initdb.sql
+docker volume create --name=postgres_database
+docker-compose up -d
+```
 
 # MySQL
 
 ## Docker-compose
+```shell
+git clone git@github.com:siddou/guacamole-mysql.git
+cd guacamole-mysql
+docker run --rm guacamole/guacamole /opt/guacamole/bin/initdb.sh --mysql > sql-scripts/initdb.sql
+mv .env.example .env
+docker-compose up -d
+```
