@@ -5,7 +5,6 @@ tags:
   - tutorial
 ---
 {% include toc %}
-
 # Postgres
 
 ## Dockerfile
@@ -107,3 +106,5 @@ docker run --rm guacamole/guacamole /opt/guacamole/bin/initdb.sh --mysql > sql-s
 mv .env.example .env
 docker-compose up -d
 ```
+
+{% include disqus.html %}

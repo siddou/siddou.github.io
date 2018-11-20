@@ -94,3 +94,5 @@ iperf -c 192.168.30.1 -d
 [![]({{ "/assets/images/dstatbonding.png" | absolute_url }}){:height="50%" width="50%"}]({{ "/assets/images/dstatbonding.png" | absolute_url }})
 
 pretty nice differences!
+
+{% include disqus.html %}

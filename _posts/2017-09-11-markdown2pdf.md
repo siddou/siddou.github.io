@@ -23,3 +23,5 @@ pandoc: pdflatex not found. pdflatex is needed for pdf output.
 ```shell
 apt-get -y --no-install-recommends install texlive-latex-base texlive-fonts-recommended texlive-latex-extra lmodern
 ```
+
+{% include disqus.html %}

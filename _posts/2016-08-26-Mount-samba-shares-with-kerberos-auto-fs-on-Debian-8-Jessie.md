@@ -38,3 +38,5 @@ systemctl restart autofs
 Your kerberos ticket should be valid (check with "klist", or else do "kinit loginname").
 Browse to /mnt/files with the files explorer, you shoud see share1 and share2.
 Browse to /mnt/files/loginname, you shoud see your private samba folder.
+
+{% include disqus.html %}

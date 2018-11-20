@@ -16,3 +16,5 @@ As a sysadmin I try to raise my dev skills when I have a chance: Python, cms, ph
 I love hacking phones and videos games consoles and I look forward to any new technologies.
 
 Hope this website will be as much useful for you as it is for me.
+
+{% include disqus.html %}

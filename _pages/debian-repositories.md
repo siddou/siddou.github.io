@@ -86,3 +86,4 @@ deb-src http://security.debian.org/ buster/updates main
 deb http://ftp.fr.debian.org/debian/ buster-updates main
 deb-src http://ftp.fr.debian.org/debian/ buster-updates main
 ```
+{% include disqus.html %}

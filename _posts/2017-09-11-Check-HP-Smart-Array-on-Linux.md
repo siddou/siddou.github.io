@@ -65,3 +65,5 @@ hpssacli
 => controller slot=0 logicaldrive all show detail
 => exit
 ```
+
+{% include disqus.html %}

@@ -118,3 +118,6 @@ puppet cert generate puppetboard.siddou.com
 puppet agent --test
 ```
 go to https://puppet5serverIP
+
+
+{% include disqus.html %}
