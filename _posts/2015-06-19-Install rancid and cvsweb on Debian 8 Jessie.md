@@ -46,6 +46,8 @@ exit
 chmod 600 /var/lib/rancid/.cloginrc
 su - rancid
 /usr/lib/rancid/bin/rancid-cvs
+```
+```shell
 nano /var/lib/rancid/group1/router.db
 ```
 ```shell
@@ -60,7 +62,7 @@ nano /var/lib/rancid/group2/router.db
 ```
 
 ```shell
-/usr/lib/rancid/bin/rancid-run
+/usr/bin/rancid-run
 exit
 ```
 
