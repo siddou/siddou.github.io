@@ -63,4 +63,4 @@ systemctl status tgtd -l
 tgtadm --mode target --op show
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

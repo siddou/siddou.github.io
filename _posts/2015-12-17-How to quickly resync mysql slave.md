@@ -38,4 +38,4 @@ Slave_IO_Running: Yes
 Slave_SQL_Running: Yes
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

@@ -21,5 +21,4 @@ sudo ip route add 192.168.15.0/24 dev enp3s0
 sudo route del -net 192.168.15.0 netmask 255.255.255.0 gw 10.255.11.4
 sudo ip route del 192.168.15.0/24
 ```
-
-{% include disqus.html %}
+{% include comments.html %}

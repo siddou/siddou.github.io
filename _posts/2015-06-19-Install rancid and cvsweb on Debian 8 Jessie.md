@@ -226,4 +226,4 @@ a2enmod authnz_ldap
 systemctl restart apache2
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

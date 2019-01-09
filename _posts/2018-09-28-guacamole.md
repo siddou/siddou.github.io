@@ -107,4 +107,4 @@ mv .env.example .env
 docker-compose up -d
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

@@ -36,4 +36,4 @@ apt::sources:
       source: 'https://packages.gitlab.com/runner/gitlab-ci-multi-runner/gpgkey'
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

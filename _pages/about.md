@@ -4,6 +4,7 @@ permalink: /about/
 title: "About"
 last_modified_at: 2018-08-06
 author_profile: true
+comments: true
 ---
 
 I am a French guy into computers since I am a kid. We had an apple II, then intel 286, 386, 486, Pentium II & Pentium III…, well still almost every two year i like to upgrade my system :p
@@ -17,4 +18,4 @@ I love hacking phones and videos games consoles and I look forward to any new te
 
 Hope this website will be as much useful for you as it is for me.
 
-{% include disqus.html %}
+{% include comments.html %}

@@ -23,4 +23,4 @@ ex:
 lftp -c 'open sftp://ftp01.didou.com;user paludia secret123;set sftp:auto-confirm yes;mirror / /home/paludia; quit'
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

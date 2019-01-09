@@ -35,4 +35,4 @@ SSLCertificateKeyFile /etc/ssl/private/siddou.tk.key
 ```
 
 
-{% include disqus.html %}
+{% include comments.html %}

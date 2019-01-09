@@ -287,7 +287,7 @@ defaults:
       comments: true
       share: true
       related: true
-      sidebar: true
+
   # _pages
   - scope:
       path: "_pages"

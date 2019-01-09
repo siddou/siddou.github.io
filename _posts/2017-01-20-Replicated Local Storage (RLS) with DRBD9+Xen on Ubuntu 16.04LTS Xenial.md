@@ -382,5 +382,4 @@ drbdsetup status --verbose --statistics
 
 [users-guide-90](https://www.drbd.org/en/doc/users-guide-90){:target="_blank"}
 
-
-{% include disqus.html %}
+{% include comments.html %}

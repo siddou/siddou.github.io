@@ -387,4 +387,4 @@ Enter Auth Password: 1234383360
 
 {% include toc title="Table of Contents" %}
 
-{% include disqus.html %}
+{% include comments.html %}

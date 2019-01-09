@@ -337,4 +337,4 @@ Auto Create Users on
 Encryption Key
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

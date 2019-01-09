@@ -231,7 +231,7 @@ kubectl expose deployment hello-node --type=LoadBalancer --port=8080
 kubectl get services
 minikube service hello-node
 ```
-Browsing to http://http://xxx.xxx.xxx.xxx:8080 will shows the “Hello World” message.
+Browsing to http://xxx.xxx.xxx.xxx:8080 will shows the “Hello World” message.
 ### Enable addons
 ```shell
 minikube addons list
@@ -245,6 +245,13 @@ kubectl delete service hello-node
 kubectl delete deployment hello-node
 ```
 
+# Docker Compose File to Kubernetes Resources
+## kompose
+```shell
+curl -L https://github.com/kubernetes/kompose/releases/download/v1.17.0/kompose-linux-amd64 -o kompose
+chmod +x kompose
+sudo mv ./kompose /usr/local/bin/kompose
+```
 
 
 
@@ -269,6 +276,7 @@ kubectl delete deployment hello-node
 
 
 
+{% include comments.html %}
 
 
 
@@ -282,16 +290,3 @@ kubectl delete deployment hello-node
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-{% include disqus.html %}

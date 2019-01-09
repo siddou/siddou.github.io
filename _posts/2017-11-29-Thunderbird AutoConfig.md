@@ -135,5 +135,4 @@ nano /var/www/siddou.tk/.well-known/autoconfig/mail/config-v1.1.xml
 Now when adding a new mail account in TB, the correct settings will be automatically filled.
 
 
-
-{% include disqus.html %}
+{% include comments.html %}

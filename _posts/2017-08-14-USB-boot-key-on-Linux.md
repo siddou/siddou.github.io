@@ -8,4 +8,4 @@ tags:
 sudo dd if=debian-9.1.0-amd64-netinst.iso of=/dev/sdx bs=4M && sync
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

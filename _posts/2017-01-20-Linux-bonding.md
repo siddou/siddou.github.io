@@ -95,4 +95,4 @@ iperf -c 192.168.30.1 -d
 
 pretty nice differences!
 
-{% include disqus.html %}
+{% include comments.html %}

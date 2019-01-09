@@ -176,4 +176,4 @@ debug windows:
 (16:55:30) sasl: GSSAPI client step 2
 ```
 
-{% include disqus.html %}
+{% include comments.html %}

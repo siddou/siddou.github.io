@@ -120,4 +120,4 @@ puppet agent --test
 go to https://puppet5serverIP
 
 
-{% include disqus.html %}
+{% include comments.html %}

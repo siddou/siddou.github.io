@@ -66,4 +66,4 @@ hpssacli
 => exit
 ```
 
-{% include disqus.html %}
+{% include comments.html %}
