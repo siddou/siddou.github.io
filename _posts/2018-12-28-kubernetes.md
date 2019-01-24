@@ -6,7 +6,7 @@ tags:
 ---
 {% include toc %}
 
-# Install kubernetes on Ubuntu 18.04.1 LTS (Bionic Beaver)
+# Install Minikube's kubernetes Cluster on Ubuntu 18.04.1 LTS (Bionic Beaver)
 
 ### [install kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/){:target="_blank"}
 ```shell
