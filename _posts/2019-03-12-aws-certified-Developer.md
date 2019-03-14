@@ -175,7 +175,8 @@ Magnetic
   - Pub/Sub capabilities are needed
 
 #### CHAPTER 4 S3
-https://aws.amazon.com/s3/faqs/
+
+[Read the FAQ!](https://aws.amazon.com/s3/faqs/){:target="_blank"}
 
 ##### S3 101 - Summary
 - Remember that S3 is Object-based: i.e. allows you to upload files.
@@ -248,21 +249,275 @@ wich include **x-amz-server-side-encryption** parameter in the request header.
   - Mixed-Workloads - Avoid sequential key names for your S3 objects.
 Instead, add a random prefix like a hex hash to the key name to
 prevent multiple objects from being stored on the same partition
+  - mybucket/**7eh4**-2018-03-04-15-00-00/cust1234234/photo1.jpg
+  - mybucket/**h35d**-2018-03-04-15-00-00/cust1234234/photo2.jpg
+  - mybucket/**o3n6**-2018-03-04-15-00-00/cust1234234/photo3.jpg
 
 
 ####  CHAPTER 5 Introduction to Serverless Computing
-Serverless Summary
+##### Lambda - Exam Tips
+- Lambda scales out (not up) automatically
+- Lambda functions are independent, 1 event = 1 function
+- Lambda is serverless
+- Know what services are serverless!
+- Lambda functions can trigger other lambda functions, 1 event can = x
+functions if functions trigger other functions
+
+- Architectures can get extremely complicated, AWS X-ray allows you to debug what is happening
+- Lambda can do things globally, you can use it to back up S3 buckets to other S3 buckets etc
+- Lnow your triggers
+
+##### Exam Tips
+- Remember what API Gateway is at a high level
+- API Gateway has caching capabilities to increase performance
+- API Gateway is low cost and scales automatically
+- You can throttle API Gateway to prevent attacks
+- You can log results to CloudWatch
+- If you are using Javascript/AJAX that uses multiple domains with API Gateway, ensure that you have enabled CORS on API Gateway
+- CORS is enforced by the client
+
+##### Version Control With Lambda Exam Tips
+- Can have multiple versions of lambda functions
+- Latest version will use $latest
+- Qualified version will use $latest, unqualified will not have it
+- Versions are immutable (Cannot be changed).
+- Can split traffic using aliases to different versions
+  - Cannot split traffic with $latest, instead create an alias to latest.
+
+##### Step Functions
+- Great way to visualize your serverless application.
+- Step Functions automatically triggers and tracks each step.
+- Step Functions logs the state of each step so if something goes wrong you can track what went wring and where.
+
+##### X-Ray Exam Tips
+The X-Ray SDK provides:
+- Interceptors to add to your code to trace incoming HTTP requests
+- Client handlers to instrument AWS SDK clients that your application uses to call other AWS services
+- An HTTP client to use to instrument calls to other internal and external HTTP web services
+The X-Ray Integrates with the following AWS services:
+- Elastic Load Balancing
+- AWS Lambda
+- Amazon API Gateway
+- Amazon Elastic Compute Cloud
+- AWS Elastic Beanstalk
+The X-Ray Integrates with the following languages:
+- Java
+- Go
+- Node.js
+- Python
+- Ruby
+- .Net
+
 #### CHAPTER 6 DynamoDB
-DynamoDB Summary
+##### DynamoDB Exam Tips
+- Amazon DynamoDB is a low-latency NoSQL database.
+- Consists of Tables, Items, and Attributes
+- Supports both document and key-value data models
+- Supported document formats are JSON, HTML, XML
+- 2 types of Primary Keys: Partition Key and combination of Partition Key + Sort Key (Composite Key)
+- 2 Consistency models: Strongly Consistent/Eventually Consistent.
+- Access is controlled using IAM policies.
+- Fine grained access control using IAM Condition parameter:
+**dynamodb:LeadingKeys** to allow users to access only the items where the partition key value matches their user ID
+##### DynamoDB Indexes - Exam Tips
+- Indexes enable fast queries on specific data columns.
+- Give you a different view of your data based on alternative Partition / Sort Keys
+- Important to understand the differences
+  | Local Secondary Index | Global Secondary Index |
+  | Must be created at when you create your table | Can create any time - at table creation of after |
+  | Same Partition Key as your table | Different Partition Key |
+  | Different Sort Key | Different Sort Key |
+##### Scan Vs Query Exam Tips
+- A Query operation finds items in a table using only the Primary Key attribute.
+- You provide the Primary Key name and a disctinct value to search for.
+- A scan operation examines every item in the table.
+  - By default, returns all data attributes
+- Use the ProjectionExpression parameter to refine the results.
+- Query results are always sorted by the Sort Key (if there is one.)
+- Sorted in ascending order
+- Set ScanIndexForward parameter to false to reverse the order - queries only
+- Query operation is generally more efficient than a Scan.
+- Reduce the impact of a query or scan by setting a smaller page size which uses fewer read operations.
+- Isolate scan operations to specific tables and segregate them from your mission-critical traffic.
+- Try Parallel scans rather than the default sequential scan.
+- Avoid using scan operations if you can: design tables in a way that you can use the Query, Get, or BatchGetItem APIs.
+##### DynamoDB Provisioned Throughput Exam Tips
+- Provisioned Throughput is measured in Capacity Units
+- 1 x Write Capacity Unit = 1 x 1KB Write per second.
+- 1 x x Read Capacity Unit = 1x 4KB Strongly Consistent Read OR 2 x 4KB Eventually Consistent Reads per second.
+###### Calculate Write Capacity Requirements (100 x 512 byte items per second):
+- First, calculate how many Capacity Units for each write:
+  Size of each item / 1KB (for Write Capacity Units)
+  512 bytes / 1KB = 0.5
+- Rounded-up to the nearest whole number, each write will need 1 x Write Capacity Unit per write operation
+- Multiplied by the number of writes per second = 1 x 100 = 100 Write Capacity Units required
+###### Calculate Read Capacity Requirements (80 x 3KB items per second):
+- First, calculate how many Capacity Units for each read:
+  Size of each item / 4KB (for Read Capacity Units)
+  3KB / 4KB = 0.75
+- Rounded-up to the nearest whole number, each read will need 1 x Read Capacity Unit operation
+- Multiplied by the number of reads per second = 1 x 80 = 80 Read Capacity Units required for Strongly Consistent, but if Eventual Consistency is acceptable, divide by 2 = 40 read Capacity Units required
+##### DAX Exam Tips
+- Provides in-memory caching for DynamoDB tables
+- Improves response times for Eventually Consistent reads only.
+- You point your API calls to the DAX cluster instead of your table.
+- If the item you are queryng is on the cache, DAX will return it; otherwise, it will perform an Eventually Consistent GetItem operation to your DynamoDB table.
+- Not suitable for write-intensive applications or applications that require Strongly Consistent reads.
+
+##### Elasticache Exam Tips
+- In-memory cache sits between your application and database
+- 2 different caching strategies: Lazy loading and Write Through
+- Lazy Loading only caches the data when it is requested
+- Elasticcache Node failures not fatal, just lots of cache misses
+- Cache miss penalty: Initial request, query database, writing to cache
+- Avoid stale data by implementing a TTL
+- Write Through strategy writes data into the cache whenever there is a change to the database
+- Data is never stale
+- Write penalty: Each write involves a write to the cache
+- Elasticache node failure means that data is missing until added or updated in the database
+- Wasted resources if most of the data is never used
+
+
 #### CHAPTER 7 KMS and Encryption on AWS
-KMS Exam Tips
+##### AWS Key Management 101
+AWS Key Management (AWS KMS) is a managed service that makes it easy for you to create and control the encryption keys used to encrypt your data. AWS KMS is integrated with other AWS services including, EBS, S3, Amazon Redshift, Amazon Elastic Transcoder, Amazon WoekMail, Amazon Relational Database Service (Amazon RDS), and others to make it simple to encrypt your data with encryption keys that you manage.
+##### AWS Key Management Service Exam Tips
+- CMK
+  - alias
+  - creation date
+  - description
+  - key state
+  - **key material (either customer provided or AWS provided).
+- Can **Never** be exported
+###### Setup a Customer Master Key:
+- Create Alias and Description
+- Choose material option...
+- Define Key **Administrative Permissions**
+  - IAM users/roles that can administer (but not use) the key htrough the KMS API.
+- Define Key **Usage Permissions**
+  - IAM users/roles that can use the key to encrypt and decrypt data.
+###### Key material options:
+- Use KMS generated key material
+- Your own key material
+##### AWS API Calls Exam Tips
+- **aws kms encrypt**
+- **aws kms decrypt**
+- **aws kms re-encrypt**
+- **aws kms enable-key-rotation**
+##### AWS Encryption Exam Tips
+**The Customer Master key:**
+- Customer Master Key used to decrypt the data key (envelope key)
+- Envelope Key is used to decrypt the data key (envelope key)
+
+
+
 #### CHAPTER 8 Other AWS Services
-Other AWS Services Summary
+##### SQS Exam Tips
+- SQS is a distributed message queueing system
+- SQS allows you to decouple the components of an application so that they are independent
+- Pull-based not push-based
+- Standard Queues (default): best effort ordering, message delivered at least once
+- FIFO Queues (First In First Out): ordering strictly preserved, message delivered once, no duplicates (e.g. good for banking transactions which need to happen in strict order)
+- Visibility Timeout
+  - Default 30 seconds - increase if your task takes >30 seconds to complete
+  - Max 12 hours
+- Short Polling - returned immediately even if no messages are in the queue
+- Long Polling - polls the queue periodically and only returns a response when a message is in the queue or go the timeout is reached
+##### SNS Exam Tips
+- SNS is a scalable and highly available notification service which allows you to send push notifications from the cloud
+- A variety of a message formats are supported: SMS test message, email, Amazon Simple Queue Services (SQS) queues, any HTTP endpoint.
+- Pub-sub model whereby users subscribe to topics
+- It is a push mechanism rather tahn a pull mechanism
+- Exemple architecture: a company wanting to send notifications to multuple customers could use SNS to fan out multiple messages in SQS format using a dedicated SQS queue per customer
+##### SNS Vs SES Exam Tips
+- Remember that SES is for email only
+- It can be used for incoming and outgoing mail
+- It is not subscription based-you only need to know the email address
+- SNS caters for various formats (SMS, SQS, HTTP, email)
+- Push notifications only
+- Pub/ sub model-consumers must subscribe to a topic
+- You can fan out messages to large number of recipients, (e.g. multiple clients each with their own SQS queue)
+##### Kinesis Exam Tips
+- Know the difference between the three core services:
+  - Kinesis Streams:
+    - Video Streams - securely stream video from connected devices to AWS for analytics and machine learning
+    - Data Steams - Build custom applications process data in real-time
+  - Kinesis Firehose - capture, transform, load data streams into AWS data stores for near real-time analytics with BI tools
+
+- You can configure Lambda to subscribe to a Kinesis Stream and execute a function on your behalf when a new record is detected, before sending the processed data on to its final destination
+##### Elastic Beanstalk Exam Tips
+- Deploys and scales your web applications including the web application server platform where required
+- Supports widely used programming technologies - Java, PHP, Python, Ruby, Go, Docker, .NET, and Node.js
+- As well as application server platforms like Tomcat, Passenger, Puma, and IIS
+- Provisions the underlying resources for you
+- Can fully manage the EC2 instances for you, or you can take full administrative control
+- Updates, monitoring, metrics, and health checks all included
+##### Updating Elastic Beanstalk Exam Tips
+- Remember the 4 different deployment approaches:
+  - All at Once
+    - Service interruption while you update the entire environment at once
+    - To roll back, perform a futher all at All at Once upgrade
+  - Rolling
+    - Reduced capacity during deployment
+    - To roll back, perform a futher rolling update
+  - Rolling with Additional Batch
+    - Maintains full capacity
+    - To roll back, perform a futher rolling update
+  - Immutable
+    - Preferred option for mission critical production systems
+    - Maintains full capacity
+    - To roll back, just delete the new instances and autoscaling group
+##### Advanced Elastic Beanstalk Exam Tips
+- You can customize your Elastic Beanstalk environment by adding configuration files
+- The files are written in YAML or JSON
+- Files have a .config extension
+- The .config files are saved to the .ebextensions folder
+- Your .ebextensions folder must be located in the top level directory of your application source code bundle
+##### RDS & Elastic Beanstalk Exam Tips
+- Two different options for launching your RDS instance:
+  - **Launch within Elastic Beanstalk**
+    - When you terminate the Elastic Beanstalk environment, the database will also be terminated
+    - Quick and easy to add your database and get started
+    - Suitable for Dev and Test environments only
+  - **Launch outside of Elastic Beanstalk**
+    - Additional configuration steps required - Security Group and Connection information
+    - Suitable for Production environments, more flexiblility
+    - Allows connection from multiple environments, you can tear down the application stack without impacting the database
+
+
+
 #### CHAPTER 9 Developer Theory
-Developer Theory Summary
+##### CI/CD Exam Tips
+- Definitely worth a few points in the exam
+- Worth reading the white paper:
+  - [practicing-continuous-integration-continuous-delivery-on-AWS](https://d0.awsstatic.com/whitepapers/DevOps/practicing-continuous-integration-continuous-delivery-on-AWS.pdf){:target="_blank"}
+- Continuous Integration is about integrating or merging the code changes frequently - at least once per day, enables multiple devs to work on the same application
+- Continuous Delivery is all about automating the build, test, and deployment functions?
+- Continuous Deployment fully automate the entire release process, code is deployed into Production as soon as it has successfully passed through the release pipeline.
+- AWS CodeCommit - Source Control service (git)
+- AWS CodeBuild - compile source code, run tests and package code
+- AWS CodeDeploy - Automated Deployment to EC2, on premises systems and Lambda
+- AWS CodePipeline - CI/CD workflow tool, fully automates the entire release process (build, test, deployment)
+##### AWS CodeCommit Exam Tips
+- AWS CodeCommit
+  - Based on git
+  - Centralized repository for all your code, binaries, images and libraries
+  - Tracks and manages code changes
+  - Maintains version history
+  - Manages updates from multiple sources and enables collaboration
+##### AWS CodeDeploy Exam Tips
+- AWS CodeDeploy is a fully managed automated deployment service and can be used as part of a Continuous Delivery or Continuous Deployment process.
+- Remember the different types of deployment approach:
+  - **In-places or Rolling update** - you stop the application on each host and deploy the latest code. EC2 and on premise systems only. To roll back you must re-deploy the previous version of the application.
+  - **Blue / Green** - New instances are provisioned and the new application is deployed to these new instances. Traffic is routed to the new instances according to your own schedule. Supported for EC2, on-premise systems and Lambda functions. Roll back is easy, just route the traffic back to the original instances. Blue is the active deployment, green is the new release.
+
+
+
+
 #### CHAPTER 10 Advanced IAM
 Advanced IAM Summary
 #### CHAPTER 11 Monitoring
 
 #### CHAPTER 12 Summary
 Summary and next steps
+
