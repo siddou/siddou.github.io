@@ -44,12 +44,13 @@ tags:
 - 130 Minutes in Length
 - 65 questions
 - Results immediately
-- Passmark is 720. Top Score 1000.
+- Passmark is 720 (72%). Top Score 1000.
 - $150 USD
 
 12/02/2019
 Hi - yes it is up to date for the latest exam. The exam was released in June 2018 and has not been refreshed since then,
 
+[Tips](https://medium.com/devopslinks/passing-the-aws-certified-developer-associate-exam-c83c894cb780)
 
 [Tips](https://acloud.guru/forums/aws-cda-2018/discussion/-LVjFQsZd5s5_HLdVQrx/passed_developer_associate)
 
@@ -265,7 +266,7 @@ functions if functions trigger other functions
 
 - Architectures can get extremely complicated, AWS X-ray allows you to debug what is happening
 - Lambda can do things globally, you can use it to back up S3 buckets to other S3 buckets etc
-- Lnow your triggers
+- Know your triggers
 
 ##### Exam Tips
 - Remember what API Gateway is at a high level
@@ -511,12 +512,77 @@ AWS Key Management (AWS KMS) is a managed service that makes it easy for you to 
   - **In-places or Rolling update** - you stop the application on each host and deploy the latest code. EC2 and on premise systems only. To roll back you must re-deploy the previous version of the application.
   - **Blue / Green** - New instances are provisioned and the new application is deployed to these new instances. Traffic is routed to the new instances according to your own schedule. Supported for EC2, on-premise systems and Lambda functions. Roll back is easy, just route the traffic back to the original instances. Blue is the active deployment, green is the new release.
 
+##### CodeDeploy Advanced Settings - Exam Tips
+- The AppSec file defines all the parameters needed for the deployment e.g. location of application files and pre/post deployment validation tests to run
+- For EC2 / On Premises systems, the appsec.yml file must be placed in the root directory of your revision (the same folder that contains your application code). Written in YAML
+- Lambda supports YAML or JSON
+- The **Run Order of hooks** in a CodeDeploy deployment:
+  - BeforeBlockTraffic -> BlockTraffic -> AfterBlockTraffic
+  - ApplicationStop
+  - BeforeInstall
+  - installAfterInstall
+  - ApplicationStart
+  - ValidateService
+  - BeforeAllowTraffic -> AllowTraffic -> AfterAllowTraffic
+##### AWS CodePipeline Exam Tips
+- Continuous Integration / Continuous Delivery service
+- Automates your end-to-end software release process based on a user defined workflow
+- Can be configured to automatically trigger your pipeline as soon as a change is detected in your source code repository
+- Integrates with other services from AWS like CodeBuild and CodeDeploy, as well as thrid party and custom plug-ins.
+##### Docker and CodeBuild Exam Tips
+- Docker allows you to package up your software into Containers which you can run Elastic Container Service (ECS)
+- A Docker Container includes everything the software needs to run including code, libraries, runtime and environment variables etc.
+- We use a special file called a Dockerfile to specify the instructions needed to assemble your Docker image.
+- Once built, Docker images can be stored in Elastic Container Registery (ECR) and ECS can then use the image to launch Docker containers.
+##### Docker Exam Tips
+- Docker Commands to build, tag (apply an alias) and push your Docker image to the ECR repository
+```shell
+docker build -t myimagerepo
 
+docker tag myimagerepo:latest 725350006743.dkr.ecr.eu-central-l.amazonaws.com/myimagerepo:latest
+docker push 725350006743.dkr.ecr.eu-central-l.amazonaws.com/myimagerepo:latest
+```
+##### CodeBuild Exam Tips
+- CodeBuild is a fully managed build service. It can build source code, run tests and produce software packages based on commands that you define yourself.
+- By default the buildspec.yml defines the build commands and settings used by CodeBuild to run your build
+- You can completely overrride the settings in buildspec.yml by adding your own commands in the console when you launch the build.
+- If your build fails, check the build logs in the CodeBuild console and you can also view the full CodeBuild log in CloudWatch
+
+##### CodePipeline Exam Tips
+- Continuous Integration / Continuous Delivery service
+- Automates your end-to-end software release process based on a user defined workflow
+- Can be configured to automatically trigger your pipeline as soon as a change is detected in your source code repository
+- Integrates with other services from AWS CodeBuild and CodeDeploy, as well as thrid party and custom plug-ins.
+- 
 
 
 #### CHAPTER 10 Advanced IAM
-Advanced IAM Summary
+##### Web Identity Federation Exam Tips
+- Federation allows users to authenticate with a web Identity Provider (Google, Facebook, Amazon)
+- The user authentication first with the Web ID Provider and receives an authentication token, which is exchanged for temporary AWS credentials allowing them to assume an IAM role.
+
+##### Cognito Exam Tips
+- Cognito is and Identity Broker which handles interaction between your applications and the Web ID provider (you don't need to write your own code to do this.)
+  - Provides sign-up, sign-in and guest user access
+  - Syncs user data for a seamless experience across your devices
+- Cognito is the AWS-recommended approach for Web ID Federation
+- Cognito uses User Pools to manage user sign-up and sign-in directly, or via Web Identity Providers
+- Cognito uses Push Synchronization to send a silent push notification of user data updates to multiple device types associated with a user ID.
+
+![]({{ "/assets/images/aws/developer/Cognito_user_pools_exemple.png" | absolute_url }}){:class="img-responsive"}
+
+##### Inline Policies Vs Managed Policies vs. Custom Policies Exam Tips
+- Remember the 3 different types of IAM Policies:
+  - Managed Policy - AWS-managed default Policies
+  - Customer Managed Policy - Managed by you
+  - Inline Policy - Managed by you and embedded in a single user, group, or role.
+- In most cases, AWS recommends using Managed Policies over Inline Policies
+
 #### CHAPTER 11 Monitoring
+##### CloudWatch vs CloudTrail vs config
+- CloudWatch monitors performance.
+- CloudTrail monitors API calls in the AWS platform.
+- AWS Config records the state of your AWS environment and can notify you changes.
 
 #### CHAPTER 12 Summary
 Summary and next steps
