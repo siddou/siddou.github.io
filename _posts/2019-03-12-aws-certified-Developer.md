@@ -1,4 +1,5 @@
 ---
+classes: wide
 title:  "aws certified Developper"
 tags:
   - aws

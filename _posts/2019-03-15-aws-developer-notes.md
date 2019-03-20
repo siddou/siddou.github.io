@@ -1,13 +1,16 @@
 ---
+classes: wide
 title:  "aws certified Developper notes"
 tags:
   - aws
   - certification
 ---
+{% include toc %}
 
 #EC2
 - Storage
-  - EBS provides persistent block storage volumes
+  - EBS provides persistent block storage volumes.
+  - EBS encryption uses AWS KMS customer master keys
   - Instance Stores will be wiped if the instance is stopped
 
 # S3
@@ -18,6 +21,10 @@ tags:
 - There are two ways to configure server-side encryption for Amazon S3 artifacts:
   - CodePipeline creates an Amazon S3 artifact bucket and default AWS-managed SSE-KMS encryption keys when you create a pipeline using the Create Pipeline wizard. The master key is encrypted along with object data and managed by AWS.
   - You can create and manage your own customer-managed SSE-KMS keys.
+
+# S3 CloudFront
+-  fast content delivery network (CDN)
+-  Edge Location - This is the location where content will be cached. This is separate to an AWS Region/AZ
 
 # CodeBuild
 Overrride build with buildspecOverride properties set to the new buildspec.yml file
@@ -75,6 +82,7 @@ Managed, Redis or Memcached-compatible in-memory data store.
     - Data Steams - Build custom applications process data in real-time
 - Kinesis Firehose - capture, transform, load data streams into AWS data stores for near real-time analytics with BI tools
 - You can configure Lambda to subscribe to a Kinesis Stream and execute a function on your behalf when a new record is detected, before sending the processed data on to its final destination
+- Preprocessing Data with AWS Lambda function
 
 # CloudWatch
 - monitoring and management service
@@ -98,6 +106,7 @@ Managed, Redis or Memcached-compatible in-memory data store.
 # Cloud​Formation
 - provides a common language for you to describe and provision all the infrastructure resources in your cloud environment
 - package then deploy
+- templates?
 
 # CodeDeploy
 - deployment service that automates software deployments to a variety of compute services such as Amazon EC2, AWS Fargate, AWS Lambda, and your on-premises servers
@@ -120,3 +129,26 @@ Managed, Redis or Memcached-compatible in-memory data store.
 - Step Functions automatically triggers and tracks each step.
 - Step Functions logs the state of each step so if something goes wrong you can track what went wring and where.
 - With IAM roles for Amazon ECS tasks, you can specify an IAM role that can be used by the containers in a task
+
+# IAM consists of the following:
+- Users
+- Groups (A way to group our users and apply polices to the collectively)
+- Roles
+- Policy Documents
+
+# KMS (AWS Key Management)
+- Managed service that makes it easy for you to create and control the encryption keys used to encrypt your data.
+- Integrated with other AWS services including, EBS, S3, Amazon Redshift, Amazon Elastic Transcoder, Amazon WoekMail, Amazon Relational Database Service (Amazon RDS), and others to make it simple to encrypt your data with encryption keys that you manage.
+
+# CodeStar
+- cloud-based service for creating, managing, and working with software development projects on AWS
+
+# Route 53
+- Routing Policy
+  - Simple routing policy – Use for a single resource that performs a given function for your domain, for example, a web server that serves content for the example.com website.
+  - Failover routing policy – Use when you want to configure active-passive failover.
+  - Geolocation routing policy – Use when you want to route traffic based on the location of your users.
+  - Geoproximity routing policy – Use when you want to route traffic based on the location of your resources and, optionally, shift traffic from resources in one location to resources in another.
+  - Latency routing policy – Use when you have resources in multiple AWS Regions and you want to route traffic to the region that provides the best latency.
+  - Multivalue answer routing policy – Use when you want Route 53 to respond to DNS queries with up to eight healthy records selected at random.
+  - Weighted routing policy – Use to route traffic to multiple resources in proportions that you specify.
