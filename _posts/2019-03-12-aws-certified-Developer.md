@@ -30,6 +30,8 @@ tags:
 #### 5.1 Write code that can be monitored.
 #### 5.2 Perform root cause analysis on faults found in testing or production.
 
+### [Developer notes]({{ site.baseurl }}{% post_url 2019-03-15-aws-developer-notes %})
+
 ### acloud.guru training
 #### CHAPTER 1 Introduction
 
@@ -63,6 +65,7 @@ Hi - yes it is up to date for the latest exam. The exam was released in June 201
 [Tips](https://acloud.guru/forums/aws-cda-2018/discussion/-LWDVxz601aEDRXyZS_P/passed_the_cda_exam_on_friday)
 
 [Tips](https://acloud.guru/forums/aws-cda-2018/discussion/-LZRDTlcsGXtCh6EYIwY/passed:_cda_feb_2019)
+
 
 #### CHAPTER 2 Beginners Guide to IAM
 [AWS Security Best Practices](https://d1.awsstatic.com/whitepapers/Security/AWS_Security_Best_Practices.pdf){:target="_blank"}

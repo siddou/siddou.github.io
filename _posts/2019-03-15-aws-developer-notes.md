@@ -69,6 +69,12 @@ Managed, Redis or Memcached-compatible in-memory data store.
 
 # Kinesis
 - collect, process, and analyze video and data streams in real time
+- three core services:
+  - Kinesis Streams:
+    - Video Streams - securely stream video from connected devices to AWS for analytics and machine learning
+    - Data Steams - Build custom applications process data in real-time
+- Kinesis Firehose - capture, transform, load data streams into AWS data stores for near real-time analytics with BI tools
+- You can configure Lambda to subscribe to a Kinesis Stream and execute a function on your behalf when a new record is detected, before sending the processed data on to its final destination
 
 # CloudWatch
 - monitoring and management service
@@ -78,7 +84,8 @@ Managed, Redis or Memcached-compatible in-memory data store.
 - Choose instance type  when creating a new configuration file in S3 and use the same during environment creation
 - blue and green - two separate, but identical environment, use separated instances.
 
-![]({{ "/assets/images/aws/developer/deployment-methods.png" | absolute_url }}){:class="img-responsive"}
+[![]({{ "/assets/images/aws/developer/deployment-methods.png" | absolute_url }}){:class="img-responsive"}]({{ "/assets/images/aws/developer/deployment-methods.png" | absolute_url }})
+
 
 # DynamoDB
 - Auto scaling - when you have unpredictable workloads
@@ -108,3 +115,8 @@ Managed, Redis or Memcached-compatible in-memory data store.
 # Ecs (Amazon Elastic Container Service)
 - Highly scalable, high-performance container orchestration service that supports Docker containers and allows you to easily run and scale containerized applications
 
+# Step Functions
+- Great way to visualize your serverless application.
+- Step Functions automatically triggers and tracks each step.
+- Step Functions logs the state of each step so if something goes wrong you can track what went wring and where.
+- With IAM roles for Amazon ECS tasks, you can specify an IAM role that can be used by the containers in a task
