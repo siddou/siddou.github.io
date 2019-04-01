@@ -53,6 +53,8 @@ tags:
 12/02/2019
 Hi - yes it is up to date for the latest exam. The exam was released in June 2018 and has not been refreshed since then,
 
+[Tips](https://www.whizlabs.com/blog/aws-certified-developer-associate-practice-tests-updated/)
+
 [Tips](https://medium.com/devopslinks/passing-the-aws-certified-developer-associate-exam-c83c894cb780)
 
 [Tips](https://acloud.guru/forums/aws-cda-2018/discussion/-LVjFQsZd5s5_HLdVQrx/passed_developer_associate)
@@ -67,6 +69,12 @@ Hi - yes it is up to date for the latest exam. The exam was released in June 201
 
 [Tips](https://acloud.guru/forums/aws-cda-2018/discussion/-LZRDTlcsGXtCh6EYIwY/passed:_cda_feb_2019)
 
+[Tips](https://www.2ndwatch.com/blog/how-to-upgrade-your-chances-of-passing-any-aws-certification-exam/#respond)
+
+[Tips](https://www.selikoff.net/2019/03/02/does-a-cloud-guru-acg-prepare-you-for-the-aws-associate-developer-exam/)
+[Tips](https://www.selikoff.net/wp-content/uploads/2019/03/AWS-Associate-Developer-Study-Guide.pdf)
+[Tips](https://www.selikoff.net/2019/03/02/how-i-studied-for-the-aws-associate-developer-cert/)
+[Tips](https://www.selikoff.net/2019/03/02/how-i-recommend-studying-for-the-aws-associate-developer-exam/)
 
 #### CHAPTER 2 Beginners Guide to IAM
 [AWS Security Best Practices](https://d1.awsstatic.com/whitepapers/Security/AWS_Security_Best_Practices.pdf){:target="_blank"}
