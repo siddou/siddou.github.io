@@ -53,6 +53,8 @@ tags:
 12/02/2019
 Hi - yes it is up to date for the latest exam. The exam was released in June 2018 and has not been refreshed since then,
 
+[AWS Cheat Sheets](https://tutorialsdojo.com/aws-cheat-sheets/){:target="_blank"}
+
 [Tips](https://www.whizlabs.com/blog/aws-certified-developer-associate-practice-tests-updated/)
 
 [Tips](https://medium.com/devopslinks/passing-the-aws-certified-developer-associate-exam-c83c894cb780)

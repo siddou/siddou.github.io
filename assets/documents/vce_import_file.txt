@@ -1,0 +1,130 @@
+Title Here
+Q1
+A developer is writing an application that will run on-premises, but must access AWS services through an AWS SDK. How can the Developer allow the SDK to access the AWS services?
+
+A. Create an IAM EC2 role with correct permissions and assign it to the on-premises server.
+B. Create an IAM user with correct permissions, generate an access key and store it in aws credentials file
+C. Create an IAM role with correct permissions and request an STS token to assume the role.
+D. Create an IAM user with correct permissions, generate an access key and store it in a Dynamo DB table.
+
+Answer: B
+
+When working on development, you need to use the AWS Access keys to work with the AWS Resources
+
+The AWS Documentation additionally mentions the following
+
+You use different types of security credentials depending on how you interact with AWS. For example, you use a user name and password to sign in to the AWS Management Console. You use access keys to make programmatic calls to AWS API operations.
+
+Option A is incorrect since we need to do this from an on-premise server you cannot use an EC2 role to work with an on-premise server.
+
+Option C is incorrect. If you want to test your application on your local machine, you're going to need to generate temporary security credentials (access key id, secret access key, and session token). You can do this by using the access keys from an IAM user to call assumeRole. The result of that call will include credentials that you can use to set the AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_SESSION_TOKEN (note without the token, they keys will be invalid). The SDK/CLI should then use these credentials. This will give your app a similar experience to running in an Amazon EC2 instance that was launched using an IAM role.
+
+https://forums.aws.amazon.com/thread.jspa?messageID=604424
+
+Option D is incorrect since the access keys should be on the local machine
+
+For more information on usage of credentials in AWS , please refer to the below link:
+
+https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html
+Set credentials in the AWS credentials profile file on your local system, located at:
+
+~/.aws/credentials on Linux, OS X, or Unix
+C:\Users\USERNAME\.aws\credentials on Windows
+
+
+https://docs.aws.amazon.com/amazonswf/latest/awsrbflowguide/set-up-creds.html
+
+Q2
+A Developer is migrating an on-premises web application to the AWS Cloud. The application currently runs on a 32-processor server and stores session state in memory. On Friday afternoons the server runs at 75% CPU utilization, but only about 5% CPU utilization at other times.
+
+How should the Developer change to code to better take advantage of running in the cloud?
+
+A. Compress the session state data in memory
+B. Store session state on EC2 instance Store
+C. Encrypt the session state data in memory
+D. Store session state in an ElastiCache cluster
+
+Answer: D
+
+
+ElastiCache is the perfect solution for managing session state. This is also given in the AWS Documentation
+
+In order to address scalability and to provide a shared data storage for sessions that can be accessible from any individual web server, you can abstract the HTTP sessions from the web servers themselves. A common solution to for this is to leverage an In-Memory Key/Value store such as Redis and Memcached.
+
+Option A is incorrect since compression is not the ideal solution
+
+Option B is incorrect since EC2 Instance Store is too volatile.
+
+Option C is incorrect since this is ok from a security standpoint but will just make the performance worse for the application
+
+For more information on Session Management , please refer to the below Link:
+
+https://aws.amazon.com/caching/session-management/
+Q3
+An organization's application needs to monitor application specific events with a standard AWS service. The service should capture the number of logged in users and trigger events accordingly. During peak times, monitoring frequency will occur every 10 seconds.
+
+What should be done to meet these requirements?
+
+A. Create an Amazon SNS notification
+B. Create a standard resolution custom Amazon Cloudwatch log
+C. Create a high-resolution custom Amazon Cloudwatch metric
+D. Create a custom Amazon CLoudTrail log.
+
+Answer: C
+
+This is clearly mentioned in the AWS Documentation
+
+When creating an alarm, select a period that is greater than or equal to the frequency of the metric to be monitored. For example, basic monitoring for Amazon EC2 provides metrics for your instances every 5 minutes. When setting an alarm on a basic monitoring metric, select a period of at least 300 seconds (5 minutes). Detailed monitoring for Amazon EC2 provides metrics for your instances every 1 minute. When setting an alarm on a detailed monitoring metric, select a period of at least 60 seconds (1 minute).
+
+If you set an alarm on a high-resolution metric, you can specify a high-resolution alarm with a period of 10 seconds or 30 seconds, or you can set a regular alarm with a period of any multiple of 60 seconds
+
+Option A is incorrect since the question does not mention anything on notifications.
+
+Option B is incorrect since the standard resolution counters will not help define triggers within a 10 second interval
+
+Option D is incorrect since Cloudtrail is used for API Activity logging
+
+For more information on Cloudwatch metrics , please refer to the below Link:
+
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html
+Q4
+In regard to DynamoDB, for which one of the following parameters does Amazon not charge you?
+
+A. Cost per provisioned write units
+B. Cost per provisioned read units
+C. Storage cost
+D. I/O usage within the same Region
+
+Answer: D
+
+In DynamoDB, you will be charged for the storage and the throughput you use rather than for the I/O which has been used.
+
+Reference: http://aws.amazon.com/dynamodb/pricing/
+
+Q5
+
+Your mobile application includes a photo-sharing service that is expecting tens of thousands of users at launch. You will leverage Amazon Simple Storage Service (S3) for storage of the user Images, and you must decide how to authenticate and authorize your users for access to these images. You also need to manage the storage of these images. Which two of the following approaches should you use? Choose two answers from the options below
+
+A. Create an Amazon S3 bucket per user, and use your application to generate the S3 URL for the appropriate content.
+B. Use AWS Identity and Access Management (IAM) user accounts as your application-level user database, and offload the burden ofauthentication from your application code.
+C. Authenticate your users at the application level, and use AWS Token Service (STS)to grant token-based authorization to S3objects.
+D. Authenticate your users at the application level, and send an SMS token message to the user.Create an Amazon S3 bucket with the same name as the SMS message token, and move the user's objects to that bucket.
+E. Use a key-based naming scheme comprised from the user IDs for all user objects in a single Amazon S3 bucket.
+
+Answer: C and E
+
+The AWS Token Service (STS) is a web service that enables you to request temporary, limited-privilege credentials for AWS Identity and Access Management (IAM) users or for users that you authenticate (federated users).
+
+The token can then be used to grant access to the objects in S3.
+
+You can then provides access to the objects based on the key values generated via the user id.
+
+Option A is possible but then becomes a maintenance overhead because of the number of buckets.
+
+Option B is invalid because IAM users is not a good practice.
+
+Option D is invalid because SMS tokens are not efficient for this requirement.
+
+For more information on the Token Service please refer to the below link
+
+https://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html

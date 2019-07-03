@@ -26,6 +26,8 @@ tags:
 
 ##### S3 101 - Summary
 - Remember that S3 is Object-based: i.e. allows you to upload files.
+- S3 offers encryption services for **data at flight** and **data at rest**
+- RRS - Reduced Redundancy Storage - Objects stored using the RRS option have less redundancy than objects stored using standard Amazon S3 storage
 - Files can be from 0 Bytes to 5 TB.
 - There is unlimited storage.
 - Files are stored in Buckets.
@@ -196,13 +198,15 @@ Overrride build with buildspecOverride properties set to the new buildspec.yml f
 - TTL can be enabled for items that can be deleted in a particular timeframe.
 - Encryption can only be configured during table creation time
 - Not a good choice for storing BLOBs, directly, but it could be a good choice for indexing BLOBs that are stored on S3
+- uses optimistic concurrency control
+- uses conditional writes for consistency
 - **DynamoDB Streams** use cases:
   - An application in one AWS region modifies the data in a DynamoDB table. A second application in another AWS region reads these data modifications and writes the data to another table, creating a replica that stays in sync with the original table.
   - A popular mobile app modifies data in a DynamoDB table, at the rate of thousands of updates per second. Another application captures and stores data about these updates, providing near real time usage metrics for the mobile app.
   - A global multi-player game has a multi-master topology, storing data in multiple AWS regions. Each master stays in sync by consuming and replaying the changes that occur in the remote regions.
   - An application automatically sends notifications to the mobile devices of all friends in a group as soon as one friend uploads a new picture.
   - A new customer adds data to a DynamoDB table. This event invokes another application that sends a welcome email to the new customer.
-
+- primary key can be combined from 2 attributes.
 
 - Provisioned Throughput is measured in Capacity Units
 - 1 x Write Capacity Unit = 1 x 1KB Write per second.
@@ -275,6 +279,7 @@ How many WCU are needed to support 100 writes per second of 512bytes
   - The table's provisioned read throughput is not being fully utilized.
   - Sequential Scan operations are too slow.
 - Reduce the impact of a query or scan by setting a smaller **page size** which uses fewer read operations.
+- Query seeing a few attributes - Use **ProjectionExpression**
 
 # Cloud​Formation
 - provides a common language for you to describe and provision all the infrastructure resources in your cloud environment
@@ -384,10 +389,43 @@ How many WCU are needed to support 100 writes per second of 512bytes
 # AWS SDK
 - Error Retries and Exponential Backoff
 
+# SSM Parameter Store (Systems Manager Parameter Store)
+- provides secure, hierarchical storage for configuration data management and secrets management
+
+
+
+
+
+
 # Test Axioms
-## Domaine 3 - Development with AWS Services
+## Domain 1 - Deployment
+- Elastic Load Balancing and Auto Scaling are designed to work together.
+- Scaling out is better than scaling up.
+- AWS Elastic Beanstalk allows you to focus on building your applications.
+- CloudFormation templates allow you have a definition of resources to create.
+- A serverless application is typically a combination of Lambda + other AWS Services.
+https://github.com/awslabs/serverless-application-model
+
+## Domain 2 - Security
+- Lock down the Master Account.
+- Security groups only *allow*. NACLs allow explicit *deny*.
+- Prefer IAM Roles to Access Keys.
+
+## Domain 3 - Development with AWS Services
 - Choose Managed Service over unmanaged services.
 - Do not directly expose resources or API; use AWS edge services and API Gateway.
 - Session state stored on the server is **never** a good architecture.
 - Decouple your infrastructure.
 
+## Domain 4 - Refactoring
+- Durability and availability are not the same thing.
+- scalability and elasticity are not the same thing.
+- Persistence and Amazon EC2 Instance Store do no go together.
+- Migrate your monolith apps to microservices to functions.
+- Go serverless!
+
+## Domain 5 - Monitoring and Troubleshooting
+- Always check security groups and network access control lists when Troubleshooting
+- Instances launched into a private subnet in a VPC can't properly communicate with the Internet unless you use NAT.
+- You need an IGW and a route in the route table to talk to the internet.
+- EBS volumes are loosely coupled to EC2 instances; can attach/detach except for the boot volume.
