@@ -69,7 +69,7 @@ tags:
 #### CHAPTER 1 Introduction
 
 | Domain | % of Examination |
-| Domain 1: Design for Organizational Complexity | 12,5% |
+| Domain 1: Design for Organizational Complexity | 12.5% |
 | Domain 2:  Design for New Solutions | 31% |
 | Domain 3: Migration Planning  | 15% |
 | Domain 4:  Cost Control  | 12.5% |
@@ -88,6 +88,8 @@ tags:
 [Tips](https://www.udemy.com/aws-certified-solutions-architect-associate-amazon-practice-exams/learn/quiz/4394970#questions/5867212)
 [Tips](https://acloud.guru/forums/aws-certified-solutions-architect-associate/discussion/-KKr5HCv2bzH3EOBSUAt/my_path_to_solutions_architect)
 
+#### Region, availability zones
+?
 
 #### CHAPTER 3 Identity Access Management & S3
 
@@ -119,7 +121,7 @@ Identity Access Management Consist Of The Following:
 - http://s3-eu-west-1.amazonaws.com/acloudguru
 - **Not suitable to install an operating system on.**
 - Successful uploads will generate a **HTTP 200** status code.
-- By default, all newlycreated buckets are **PRIVATE**. You can setup access control to your bucket using:
+- By default, all newly created buckets are **PRIVATE**. You can setup access control to your bucket using:
   - **Bucket Policies**
   - **Access Control Lists**
 - S3 buckets can be configured to create access logs which log all requests made to S3 bucket. This can be sent to another bucket and even another bucket in another account.
@@ -130,7 +132,7 @@ Identity Access Management Consist Of The Following:
 - Version ID (Important for versioning)
 - Metadata (Data about data you are storing
 - Subresources:
-  - Access COntrol Lists
+  - Access Control Lists
   - Torrent
 - Read after Write consistency for PUTS of new Objects
 - Eventual Consistency for overwrite PUTS and DELETES (can take some time to propagate)
@@ -151,7 +153,7 @@ Identity Access Management Consist Of The Following:
 - **S3 Glacier Deep Archive**
   - Amazon S3's lowest-cost storage class where a retrieval time of 12 hours is acceptable.
 
-- Encryption In Transit is achived by
+- Encryption In Transit is achieved by
   - **SSL/TLS**
 - Encryption At Rest (Server Side) is achieved by
   - **S3 Managed Keys - SSE-S3**
@@ -188,7 +190,7 @@ Identity Access Management Consist Of The Following:
 
 ##### CloudFront Overview
 
-- **Edge LOcation** - This is the location where content will be cached. This is separate to an AWS Region/AZ.
+- **Edge Location** - This is the location where content will be cached. This is separate to an AWS Region/AZ.
 - **Origin** - This is the origin of all the files that the CDN will distribute. This can be either an S3 Bucket, an EC2 Instance, an Elastic Load Balancer, or Route53.
 - **Distribution** - This is the name given the CDN which consists of a collection of Edge Locations.
 - **Web Distribution** - Typically used for Websites.
@@ -246,13 +248,6 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
   - A - Arm-based workloads
   - U - Bare Metal
 
-##### Let's Get Our Hands Dirty With EC2 - Part 2
-
-- Termination Protection is **turned off** by default, you must turn it on.
-- On an EBS-backed instance, the **default action is for the root EBS volume to be deleted** when the instance is terminated.
-- EBS Root Volumes of your DEFAULT AMI's cannot be encrypted. You can also use a third tool (such as bit locker etc) to encrypt the root volume, or this can be done when creating AMI's (lab to follow) in the AWS console or using the API.
-- Additional volumes can be encrypted
-
 ##### Security Groups Basics
 
 - All Inbound traffic is blocked by default.
@@ -265,5 +260,114 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
 - You cannot block specific IP addresses using Security Groups, instead use Network Access Control Lists.
 - You can specify allow rules, but not deny rules.
 
-##### EBS 101
+##### EBS Volumes 
+Amazon Elastic Block Store
+- Persistant block storage
+- Termination Protection is **turned off** by default, you must turn it on.
+- On an EBS-backed instance, the **default action is for the root EBS volume to be deleted** when the instance is terminated.
+- EBS Root Volumes of your DEFAULT AMI's cannot be encrypted. You can also use a third tool (such as bit locker etc) to encrypt the root volume, or this can be done when creating AMI's (lab to follow) in the AWS console or using the API.
+- Additional volumes can be encrypted
+- Automatically replicated within its AZ
+- 5 EBS Types:
+  - General Purpose (SSD) -> Most Workloads
+  - Provisioned IOPS (SSD) -> Databases
+  - Throughput Optimised Hard Disk Drive -> Big Data & Data Warehouses
+  - Cold Hard Disk Drive -> File Servers
+  - Magnetic -> infrequently accessed
 
+##### EBS Snapshots
+- Volumes exist on EBS.Think of EBS as a virtual hard disk.
+- Snapshots exist on S3. Think of Snapshots as a photograph of the disk.
+- Snapshots are point in time copies of Volumes.
+- Snapshots are incremental - This means that only the blocks that have changed since your last snapshot are moved to S3.
+- To create a snapshot for Amazon EBS volumes that serve as root devices, you should stop the instance before taking the snapshot.
+- However you can take a snap while Volumes and Snapshots
+- You can change EBS volume sizes on the fly, including changing the size and storage type.
+- Volumes will ALWAYS be in the same availability zone as the EC2 instance.
+- To move an EC2 volume from one AZ to another, take a snapshot of it, create an AMI from the snapshot and then use the AMI to launch the EC2 instance in a new AZ.
+- To move an EC2 volume from one region to another, take a snapshot of it, create an AMI from the snapshot and then copy the AMI from one region to the other. Then use the copied AMI to launch the new EC2 instance in the new region.
+
+##### AMI Types (EBS vs Instance Store)
+
+- Instance Store Volumes are sometimes called Ephemeral Storage
+- Instance store volumes cannot be stopped. If the underlying host fails, you will lose your data.
+- EBS backed instances can be stopped. You will not lose the data on this instance if it is stopped.
+- You can reboot both, you will not lose your data.
+- By default, both ROOT volumes will be deleted on termination. However, with EBS volumes, you can tell AWS to keep the root device volume.
+
+##### Encrypted Root Device Volumes & Snapshots
+
+- Snapshots of encrypted Volumes are encrypted automatically
+- Volumes restored from encrypted Snapshots are encrypted automatically
+- You can share Snapshots, but only if they are unencrypted.
+- These snapshots can be shared with other AWS accounts or made public.
+- Create a Snapshot of the unencrypted root device volume
+- Create a copy of the Snapshot and select the encrypt option
+- Create an AMI from the encrypted Snapshot
+- Use that AMI to launch new encrypted instances
+
+##### CloudWatch 101
+
+- CloudWatch is used for monitoring performance
+- CloudWatch can monitor most of AWS as well as your applications that run on AWS.
+- CloudWatch with EC2 will monitor events every 5 minutes by default.
+- You can have 1 minute intervals by turning on detailed monitoring.
+- You can create CloudWatch alarms which trigger notifications.
+- CloudWatch monitors performance.
+- CloudTrail monitors is about auditing (API calls).
+
+- What can I do With CloudWatch?
+  - Dashboards - Creates awesome dashboards to see what is happening with your AWS environment.
+  - Alarms - Allows you to set Alarms that notify you when particular thresholds are hit.
+  - Events - CloudWatch Events helps you to respond to state changes in your AWS resources.
+  - Logs - CloudWatch Logs helps you to aggregate, monitor, and store logs.
+
+##### The AWS Command Line
+
+- You can interact with AWS from anywhere in the world just by using the command line (CLI).
+- You will need to set up access in IAM
+- Commands themselves are not in the exam, but some basic commands will be useful to know for real life.
+
+##### Using IAM Roles With EC2
+
+- Roles are more secure than storing your access key and secret access key on individual EC2 instances.
+- Roles are easier to manage.
+- Roles can be assigned to an EC2 instance after it is created using both the console & command line.
+- Roles are universal - you can use them in any region.
+
+##### EC2 Instance Meta Data
+
+- Used to get informations about an instance (such as public ip)
+- curl http://169.254.169.254/latest/meta-data/
+- curl http://169.254.169.254/latest/user-data/
+
+##### Elastic File System (EFS)
+
+- Supports the Network File System version 4 (NFSv4) protocol
+- You only pay for the storage you use (no pre-provisioning required.)
+- Can scale up to the petabytes
+- Can support thousands of the concurrent NFS connections
+- Data is stored across multiple AZ's within a region
+- Read After Write Consistency
+
+##### EC2 Placement Groups
+
+- **Cluster Placement Group**
+  - Low Network Latency / High Network Throughput
+  - Can't span multiple Availability Zones.
+  - Only certain types of instances can be launched in a placement group (Compute Optimized, GPU, Memory Optimized, Storage Optimized)
+- **Partition Placement Group**
+  - Multiple EC2 instances HDFS,HBase, and Cassandra
+  - spreads your instances across logical partitions such that groups of instances in one partition do not share the underlying hardware with groups of instances in different partitions. This strategy is typically used by large distributed and replicated workloads, such as Hadoop, Cassandra, and Kafka.
+- **Spread Placement Group**
+  - Individual Critical EC2 instances
+  - Can span multiple Availability Zones.
+- The name you specify for a placement group must be unique within your AWS account.
+- AWS recommend homogenous instances within placement groups.
+- You can't merge placement groups.
+- You can't move an existing instance into a placement group. You can create an AMI from your existing instance, and then launch a new instance from the AMI into a placement group.
+
+
+#### CHAPTER 5 Databases On AWS
+
+##### Databases 101
