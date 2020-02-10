@@ -25,18 +25,16 @@ tags:
 
 ## AWS Regions and Availability Zones
 
-AWS Regions
+**AWS Regions**
 - Separate geographic areas that AWS uses to house its infrastructure.
 - These are distributed around the world so that customers can choose a region closest to them in order to host their cloud infrastructure there.
 - The closer your region is to you, the better, so that you can reduce network latency as much as possible for your end-users. You want to be near the data centers for fast service.
 - ex. us-east-2, eu-west-3
 
-Availability zone
+**Availability zone**
 - An AWS Availability Zone (AZ) is the logical building block that makes up an AWS Region
 
 ![]({{ "/assets/images/aws/architect/AZ.png" | absolute_url }}){:class="img-responsive"}
 
-Local Zone
+**Local Zone**
 - Local Zones provide you the ability to place resources, such as compute and storage, in multiple locations closer to your end users
-
-
