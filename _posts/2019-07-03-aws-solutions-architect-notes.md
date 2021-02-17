@@ -38,3 +38,14 @@ tags:
 
 **Local Zone**
 - Local Zones provide you the ability to place resources, such as compute and storage, in multiple locations closer to your end users
+
+## EC2 usage is calculated by either the hour or the second, depending on which AMI you're running.
+
+### Per-second billing is available for instances launched in:
+- On-Demand, Reserved and Spot forms
+- All regions and Availability Zones
+- Amazon Linux and Ubuntu
+
+### Windows AMI
+- billed for a minimum of one hour each time a new instance is started
+
