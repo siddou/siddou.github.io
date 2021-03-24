@@ -9,13 +9,17 @@ tags:
 
 ### Amazon FSx
 
-#### Amazon FSx for Windows
+#### Amazon FSx for Windows File Server
 
 - provides fully managed, highly reliable, and scalable file storage that is accessible over the industry-standard Service Message Block (SMB) protocol. It is built on Windows Server, delivering a wide range of administrative features such as user quotas, end-user file restore, and Microsoft Active Directory (AD) integration. Amazon FSx is accessible from Windows, Linux, and MacOS compute instances and devices. Thousands of compute instances and devices can access a file system concurrently.
 
 #### Amazon FSx for Lustre
 
 - When you need high-speed, high-capacity distributed storage. This will be for applications that do High Performance Compute (HPC), financial modelling etc. Remember that FSx for Lustre can store data directly in S3.
+
+### AWS Directory Service AD Connector
+
+- **AWS Directory Service Simple AD** - this just provides a subset of the features offered by AWS Managed Microsoft AD, including the ability to manage user accounts and group memberships, create and apply group policies, securely connect to Amazon EC2 instances, and provide Kerberos-based single sign-on (SSO).
 
 ### DynamoDB
 
@@ -26,7 +30,7 @@ tags:
   - A global multi-player game has a multi-master topology, storing data in multiple AWS regions. Each master stays in sync by consuming and replaying the changes that occur in the remote regions.
   - An application automatically sends notifications to the mobile devices of all friends in a group as soon as one friend uploads a new picture.
   - A new customer adds data to a DynamoDB table. This event invokes another application that sends a welcome email to the new customer.
-- Use **partition keys** with high-cardinality attributes
+- Use **partition keys** with high-cardinality attributes. The more distinct partition key values your workload accesses, the more those requests will be spread across the partitioned space
 
 ### RDS
 
@@ -39,14 +43,15 @@ tags:
   - SQL Server
 - Multi-AZ deployments
 - use IAM DB Authentication
+- **IAM database authentication** - authenticate to your DB instance
 - RDS event notification can only send data to an Amazon SNS topic, and not directly to a Lambda function
 - **Enhanced Monitoring** - provides metrics in real time for the operating system (OS) that your DB instance runs on, stored for 30 days in the CloudWatch Logs.
 
 #### Aurora
 
 - **Amazon Aurora Global Database** - is designed for globally distributed applications, allowing a single Amazon Aurora database to span multiple AWS regions. It replicates your data with no impact on database performance, enables fast local reads with low latency in each region, and provides disaster recovery from region-wide outages.
-
 - use **custom endpoint** to map each connection to the appropriate instance or group of instances based on your use case.
+- **Amazon Aurora Serverless cluster** - on-demand, auto-scaling configuration for Amazon Aurora. Meet the needs of the application’s peak load and scales back down when the surge of activity is over.
 
 ### S3
 
@@ -91,6 +96,7 @@ tags:
   - CPU Utilization
   - Network Utilization
   - Disk Reads/Writes
+  - Disk performance
 - **custom metrics**
   - Memory utilization
   - Disk swap utilization
@@ -222,7 +228,7 @@ tags:
 - **On Demand**
   - Allows you to pay a fixed rate by the hour (or by the second) with no commitment.
 - **Reserved**
-  - Provide you with a capacity reservation, and offer a significant discount on the hourly charge for an instance. Contract Terms are 1 Year or 3 Year Terms.
+  - Provide you with a capacity reservation, and offer a significant discount on the hourly charge for an instance. Contract Terms are 1 Year or 3 Year Terms. Only Convertible Reserved Instances can be exchanged for other Convertible Reserved Instances
 - **Spot**
   - Enables you to bid whatever price you want for instance capacity, providing for even greater savings if your applications have flexible start and end times.
   - If Spot instance is terminated by Amazon EC2, you will not be charged for partial hour usage. However, if you terminate the instance yourself, you will be charged for any hour in which the instance ran.
@@ -252,6 +258,7 @@ tags:
   - Scale based on a schedule
   - Scale based on demand
   - Use predictive scaling
+- **target tracking scaling** - select a scaling metric and set a target value
 - First EC2 instance be terminated: The instance launched from the oldest launch configuration
 
 ##### AWS Auto Scaling Group Scale out, Scale up
@@ -275,6 +282,10 @@ tags:
 ### AWS Organizations
 
 - Consolidate all of the company’s accounts using AWS Organizations.
+
+### AWS Control Tower
+
+- offers the easiest way to set up and govern a new, secure, multi-account AWS environment.
 
 ### ELB
 
@@ -307,4 +318,8 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
   - **Cached Volumes** - Entire Dataset is stored on S3 and the most frequently accessed data is cached on site
 - **Gateway Virtual Tape Library** - Used for backup and uses popular backup applications like Netbackup, Backup Exec, Veeam etc.
 
+
+### AWS Systems Manager Parameter Store
+
+- Provides secure, hierarchical storage for configuration data management and secrets management.
 
