@@ -144,6 +144,9 @@ tags:
 - **AWS Fargate** - Serverless compute for containers
 - Set ECS task with **CloudWatch Event rule**.
 
+#### EKS (Amazon Elastic Kubernetes Service)
+
+- **EKS** - provisions and scales the **Kubernetes** control plane, including the API servers and backend persistence layer, across multiple AWS availability zones for high availability and fault tolerance
 
 ### Elastic Beanstalk
 
@@ -260,6 +263,9 @@ tags:
   - Use predictive scaling
 - **target tracking scaling** - select a scaling metric and set a target value
 - First EC2 instance be terminated: The instance launched from the oldest launch configuration
+- Cooldown period
+  - default value is 300 seconds
+  - It ensures that the Auto Scaling group does not launch or terminate additional EC2 instances before the previous scaling activity takes effect.
 
 ##### AWS Auto Scaling Group Scale out, Scale up
 
@@ -323,3 +329,6 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
 
 - Provides secure, hierarchical storage for configuration data management and secrets management.
 
+### VPC
+
+- IVP4 CIDR range must be provided first in order to configure an IPV6 CIDR range.
