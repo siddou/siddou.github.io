@@ -31,6 +31,7 @@ tags:
   - An application automatically sends notifications to the mobile devices of all friends in a group as soon as one friend uploads a new picture.
   - A new customer adds data to a DynamoDB table. This event invokes another application that sends a welcome email to the new customer.
 - Use **partition keys** with high-cardinality attributes. The more distinct partition key values your workload accesses, the more those requests will be spread across the partitioned space
+- key-value store
 
 ### RDS
 
@@ -46,6 +47,7 @@ tags:
 - **IAM database authentication** - authenticate to your DB instance
 - RDS event notification can only send data to an Amazon SNS topic, and not directly to a Lambda function
 - **Enhanced Monitoring** - provides metrics in real time for the operating system (OS) that your DB instance runs on, stored for 30 days in the CloudWatch Logs.
+- When **failing over**, Amazon RDS simply flips the canonical name record (CNAME) for your DB instance to point at the standby, which is in turn promoted to become the new primary.
 
 #### Aurora
 
@@ -65,9 +67,9 @@ tags:
 - **S3 One Zone - IA**
   - For where you want a lower-cost option for infrequently accessed data, but do not require the multiple Availability Zone data resilience.
 - **S3 - Intelligent Tiering**
-  - Designed to optimize costs by automatically moving data to the most cost-effective access tier, whitout performance impact or operational overhead
+  - Designed to optimize costs by automatically moving data to the most cost-effective access tier, without performance impact or operational overhead
 - **S3 Glacier**
-  - Secure, durable, and low-cost storage class for data archiving. Retrieval times configurable from minutes to hours.
+  - Secure, durable, and low-cost storage class for **data archiving**. Retrieval times configurable from minutes to hours.
 - **S3 Glacier Deep Archive**
   - Amazon S3's lowest-cost storage class where a retrieval time of 12 hours is acceptable.
 
@@ -75,6 +77,12 @@ tags:
   - Enable Multi-Factor Authentication Delete
   - Enable Versioning
 - you can only add 1 SQS or SNS at a time for Amazon S3 events notification
+- Can notify to SQS, SNS & Lambda...
+
+#### Routing traffic to a website that is hosted in an Amazon S3 Bucket
+
+- The S3 bucket name must be the same as the domain name
+- Need a registered domain name
 
 #### Athena
 
@@ -176,6 +184,8 @@ tags:
 - Long Polling - polls the queue periodically and only returns a response when a message is in the queue or go the timeout is reached
 - messages in the SQS queue will continue to exist until you delete that message
 - does not support an extensive list of industry-standard messaging APIs and protocol
+- retention period from 1 minute to 14 days
+- cannot set a priority to individual items in the SQS queue
 
 ### MQ (Amazon MQ)
 
@@ -206,7 +216,10 @@ tags:
   - Cold Hard Disk Drive -> File Servers
   - Magnetic -> infrequently accessed
 - Max IOPS > 32,000 use a **Nitro-based** EC2 instance.
+- EBS volumes support live configuration changes while in production which means that you can modify the volume type, volume size, and IOPS capacity without service interruptions.
+An EBS volume is off-instance storage that can persist independently from the life of an instance
 
+![]({{ "/assets/images/aws/architect/Disks.png" | absolute_url }}){:class="img-responsive"}
 
 ##### EBS Snapshots
 - Volumes exist on EBS.Think of EBS as a virtual hard disk.
@@ -219,6 +232,10 @@ tags:
 - Volumes will ALWAYS be in the same availability zone as the EC2 instance.
 - To move an EC2 volume from one AZ to another, take a snapshot of it, create an AMI from the snapshot and then use the AMI to launch the EC2 instance in a new AZ.
 - To move an EC2 volume from one region to another, take a snapshot of it, create an AMI from the snapshot and then copy the AMI from one region to the other. Then use the copied AMI to launch the new EC2 instance in the new region.
+
+#### Amazon Data Lifecycle Manager (DLM)
+
+- automate the creation, retention, and deletion of snapshots taken to back up your Amazon EBS volumes
 
 ### Efs
 
@@ -273,6 +290,11 @@ tags:
 | ------------------------------------------ | ------------------ |
 | change the instance types to a higher type | add more instances |
 
+#### ENI VS ENA VS EFA
+
+- **ENI** - Elastic Network Interface - For basic networking, ex separate management network, separate loggin network.
+- **ENA** - Elastic Network Adapter - For speed between 10Gbps and 100Gbps, reliable, high throughput.
+- **EFA** - Elastic Fabric Adapter - For High Performance Computing (HPC) and machine learning.
 
 ### KMS (AWS Key Management)
 
@@ -280,6 +302,18 @@ tags:
 - Integrated with other AWS services including, EBS, S3, Amazon Redshift, Amazon Elastic Transcoder, Amazon WorkMail, Amazon Relational Database Service (Amazon RDS), and others to make it simple to encrypt your data with encryption keys that you manage.
 - If you are exceeding the requests per second limit, consider using the data key caching feature of the AWS Encryption SDK. Reusing data keys, rather than requesting a new data key for every encryption operation, might reduce the frequency of your requests to AWS KMS.
 - When you create an **AWS KMS customer master key (CMK)** in a custom key store, AWS KMS generates and stores non-extractable key material for the CMK in an **AWS CloudHSM cluster** that you own and manage.
+
+### AWS Systems Manager Parameter Store
+
+- provides secure, hierarchical storage for configuration data management and secrets management. You can store data such as passwords, database strings, Amazon Machine Image (AMI) IDs, and license codes as parameter values. You can store values as plain text or encrypted data.
+- doesn’t rotate its parameters by default
+
+### AWS Secrets Manager
+
+- Similar to Systems Manager Parameter Store
+- Automatic rotate secrets
+- Charge per secret stored and per 10,000 API calls
+- generate random secrets
 
 ### AWS Resource Access Manager (RAM)
 
@@ -293,6 +327,11 @@ tags:
 
 - offers the easiest way to set up and govern a new, secure, multi-account AWS environment.
 
+### AWS Config
+
+- enables you to assess, audit, and evaluate the configurations of your AWS resources
+- By creating an AWS Config rule, you can enforce your ideal configuration in your AWS account.
+
 ### ELB
 
 - cannot increase the instances based on demand.
@@ -303,7 +342,7 @@ tags:
 - In-memory cache sits between your application and database
 - 2 different caching strategies: Lazy loading and Write Through
 - Lazy Loading only caches the data when it is requested
-- Elasticcache Node failures not fatal, just lots of cache misses
+- Elasticache Node failures not fatal, just lots of cache misses
 - Cache miss penalty: Initial request, query database, writing to cache
 - Avoid stale data by implementing a TTL
 - Write Through strategy writes data into the cache whenever there is a change to the database
@@ -315,8 +354,10 @@ tags:
 
 ### Storage Gateway
 
-Enables hybrid storage between on-premises storage environments and the AWS Cloud.
+- Enables hybrid storage between on-premises storage environments and the AWS Cloud.
 The Storage Gateway virtual appliance connects directly to your local infrastructure as a file server, as a volume, or as a virtual tape library (VTL)
+- Tape Gateway enables you to replace using physical tapes on-premises with virtual tapes in AWS without changing existing backup workflows.
+- it is not suitable for transferring large sets of data to AWS
 
 - **File Gateway** (nfs) - For flat files, stored directly on S3
 - **Volume Gateway** (isci)
@@ -324,11 +365,55 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
   - **Cached Volumes** - Entire Dataset is stored on S3 and the most frequently accessed data is cached on site
 - **Gateway Virtual Tape Library** - Used for backup and uses popular backup applications like Netbackup, Backup Exec, Veeam etc.
 
+### AWS DataSync
 
-### AWS Systems Manager Parameter Store
-
-- Provides secure, hierarchical storage for configuration data management and secrets management.
+- move large amounts of data from on-premises to Amazon S3, EFS, or Amazon FSx for Windows File Server.
+- used with NFS & SMB
+- Install DataSync agent
+- Can be used to replicate EFS to EFS
 
 ### VPC
 
 - IVP4 CIDR range must be provided first in order to configure an IPV6 CIDR range.
+- You can enable access to your network from your VPC by attaching a virtual private gateway to the VPC, creating a custom route table, updating your security group rules, and creating an AWS managed VPN connection.
+
+### AWS OpsWorks
+
+- Configuration management service that provides managed instances of Chef and Puppet
+
+### AWS Glue
+
+- Fully managed extract, transform, and load (ETL) service that makes it easy for customers to prepare and load their data for analytics.
+
+### Amazon EMR
+
+- big data platform for processing vast amounts of data using open source tools such as Apache Spark, Apache Hive, Apache HBase, Apache Flink, Apache Hudi, and Presto.
+
+### Route 53
+
+- **Latency Routing** serve user requests from the AWS Region that provides the lowest latency. It does not, however, guarantee that users in the same geographic region will be served from the same location.
+- **Geoproximity Routing** route traffic to your resources based on the geographic location of your users and your resources.
+- **Geolocation Routing** choose the resources that serve your traffic based on the geographic location of your users, meaning the location that DNS queries originate from. Cannot control the coverage size from which traffic is routed to your instance in Geolocation Routing
+- **Weighted Routing** lets you associate multiple resources with a single domain name  or subdomain name and choose how much traffic is routed to each resource.
+
+
+### Amazon Kinesis Data Streams
+
+- If the DynamoDB table used by Kinesis does not have enough capacity to store the lease data, increase the write capacity assigned to the shard table.
+
+### Aws Global Accelerator
+
+- Service in which you create accelerators to improve availability and performance of you applications for local and global users.
+- You are assigned two static IP addresses (or you can bring your own)
+- You can control traffic using traffic dials. This is done within the endpoint group.
+
+### AWS Firewall Manager
+
+- simplifies AWS WAF and AWS Shield Advanced administration and maintenance tasks across multiple accounts and resources
+
+
+### ALB NLB CLassic LB
+
+- ALB - support sni
+- NLB - Can get Elastic IP address assigned
+
