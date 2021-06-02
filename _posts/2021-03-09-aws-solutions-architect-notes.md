@@ -296,6 +296,15 @@ An EBS volume is off-instance storage that can persist independently from the li
   - A - Arm-based workloads
   - U - Bare Metal
 
+#### lifecycle instance states
+
+- **pending** – The instance is preparing to enter the running state. An instance enters the pending state when it launches for the first time, or when it is restarted after being in the stopped state.
+- **running** – The instance is running and ready for use.
+- **stopping** – The instance is preparing to be stopped. Take note that **you will not billed** if it is preparing to stop however, **you will still be billed if it is just preparing to hibernate**.
+- **stopped** – The instance is shut down and cannot be used. The instance can be restarted at any time.
+- **shutting-down** – The instance is preparing to be terminated.
+- **terminated** – The instance has been permanently deleted and cannot be restarted. Take note that Reserved Instances that applied to terminated instances are **still billed until the end of their term according to their payment option**.
+
 #### Auto Scaling
 
 - Scaling options
@@ -481,7 +490,12 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
 
 - Use **CreationPolicy** attribute with a resource to prevent its status from reaching create complete until AWS CloudFormation receives a specified number of success signals or the timeout period is exceeded. To signal a resource, you can use the **cfn-signal** helper script or SignalResource API.
 
-## AXS Private Link
+## AWS AppSync
+## AWS Private Link
+- can provision interface VPC endpoints (interface endpoints) in your virtual private cloud (VPC) instead of connecting over the internet
+- endpoint type
+  - Gateway endpoints for Amazon S3
+  - Interface endpoints for Amazon S3 (You pay an hourly rate for every provisioned Interface endpoint)
 ## Kinesis  data stream versus Firehose
 ## Kinesis data stream
 
