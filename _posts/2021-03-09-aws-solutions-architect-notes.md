@@ -32,6 +32,7 @@ tags:
   - A new customer adds data to a DynamoDB table. This event invokes another application that sends a welcome email to the new customer.
 - Use **partition keys** with high-cardinality attributes. The more distinct partition key values your workload accesses, the more those requests will be spread across the partitioned space
 - key-value store
+- Auto Scaling not enabled by default.
 
 ### RDS
 
@@ -48,12 +49,20 @@ tags:
 - RDS event notification can only send data to an Amazon SNS topic, and not directly to a Lambda function
 - **Enhanced Monitoring** - provides metrics in real time for the operating system (OS) that your DB instance runs on, stored for 30 days in the CloudWatch Logs.
 - When **failing over**, Amazon RDS simply flips the canonical name record (CNAME) for your DB instance to point at the standby, which is in turn promoted to become the new primary.
+- increase the disk space **without downtime** - enable storage autoscaling.
 
 #### Aurora
 
 - **Amazon Aurora Global Database** - is designed for globally distributed applications, allowing a single Amazon Aurora database to span multiple AWS regions. It replicates your data with no impact on database performance, enables fast local reads with low latency in each region, and provides disaster recovery from region-wide outages.
 - use **custom endpoint** to map each connection to the appropriate instance or group of instances based on your use case.
 - **Amazon Aurora Serverless cluster** - on-demand, auto-scaling configuration for Amazon Aurora. Meet the needs of the application’s peak load and scales back down when the surge of activity is over.
+
+##### Aurora Endpoint Type
+
+- Cluster Endpoint – The Cluster Endpoint connect your application to the current primary DB instance for that DB cluster. ...
+- Reader Endpoint – The Reader Endpoint load-balances connections across the pool of available Read Replicas. ...
+- Instance Endpoints – An Instance Endpoint connects to a specific instance in the cluster.
+- Custom endpoint – A custom endpoint for an Aurora cluster represents a set of DB instances that you choose
 
 ### S3
 
@@ -78,6 +87,19 @@ tags:
   - Enable Versioning
 - you can only add 1 SQS or SNS at a time for Amazon S3 events notification
 - Can notify to SQS, SNS & Lambda...
+
+
+- Configure cross-account permissions in S3 by creating an IAM customer-managed policy that allows an IAM user or role to copy objects from the source bucket in one account to the destination bucket in the other account. Then attach the policy to the IAM user or role that you want to use to copy objects between accounts.
+
+#### S3 Glacier
+
+- ensure that retrieval capacity is available
+  - Expedited Retrieval
+  - Purchase provisioned retrieval capacity
+
+#### S3 Transfer Acceleration
+
+- enables fast, easy, and secure transfers of files over long distances between your client and your Amazon S3 bucket
 
 #### Routing traffic to a website that is hosted in an Amazon S3 Bucket
 
@@ -122,6 +144,8 @@ tags:
 
 - Analyze all of your data with the fastest and most widely used cloud data warehouse
 - **Amazon Redshift Spectrum** - query data directly from files on Amazon S3
+- When you launch an Amazon Redshift cluster, you can choose to encrypt it with a master key from the AWS Key Management Service (AWS KMS)
+- To enable cross-Region snapshot copy for an **AWS KMS–encrypted cluster**, you must configure a snapshot copy grant for a master key in the destination AWS Region
 
 ### X-Ray
 
@@ -190,6 +214,8 @@ tags:
 ### MQ (Amazon MQ)
 
 - It supports industry-standard APIs and protocols so you can switch from any standards-based message broker to Amazon MQ without rewriting the messaging code in your applications.
+- Authentication from applications to the ActiveMQ broker itself is provided using username and password-based authentication.
+Amazon MQ supports LDAP authentication and authorization with directory services like Microsoft Active Directory.
 
 ### SNS vs SQS
 
@@ -279,10 +305,11 @@ An EBS volume is off-instance storage that can persist independently from the li
   - Scale based on demand
   - Use predictive scaling
 - **target tracking scaling** - select a scaling metric and set a target value
-- First EC2 instance be terminated: The instance launched from the oldest launch configuration
 - Cooldown period
   - default value is 300 seconds
   - It ensures that the Auto Scaling group does not launch or terminate additional EC2 instances before the previous scaling activity takes effect.
+- default termination policy - First EC2 instance be terminated: The instance launched from the oldest launch configuration
+- Instance scale-in protection - To control whether an Auto Scaling group can terminate a particular instance when scaling in.
 
 ##### AWS Auto Scaling Group Scale out, Scale up
 
@@ -361,8 +388,8 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
 
 - **File Gateway** (nfs) - For flat files, stored directly on S3
 - **Volume Gateway** (isci)
-  - **Stored Volumes** - Entire Dataset is stored on site and is asynchronously backed up to S3.
-  - **Cached Volumes** - Entire Dataset is stored on S3 and the most frequently accessed data is cached on site
+  - **Stored Volumes** - Entire Dataset is stored **on site** and is asynchronously backed up to S3.
+  - **Cached Volumes** - Entire Dataset is stored **on S3** and the most frequently accessed data is cached on site
 - **Gateway Virtual Tape Library** - Used for backup and uses popular backup applications like Netbackup, Backup Exec, Veeam etc.
 
 ### AWS DataSync
@@ -376,6 +403,29 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
 
 - IVP4 CIDR range must be provided first in order to configure an IPV6 CIDR range.
 - You can enable access to your network from your VPC by attaching a virtual private gateway to the VPC, creating a custom route table, updating your security group rules, and creating an AWS managed VPN connection.
+- Each subnet maps to a single Availability Zone.
+- Every subnet that you create is automatically associated with the main route table for the VPC.
+
+#### Network ACL
+
+- To enable the connection to a service running on an instance, the associated network ACL must allow both inbound traffic on the port that the service is listening on as well as allow outbound traffic from **ephemeral ports**.
+
+#### Security groups for your VPC
+
+- You might set up network ACLs with rules similar to your security groups in order to add an additional layer of security to your VPC.
+
+| Security group                                                                                                                                               | Network ACL                                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Operates at the instance level                                                                                                                               | Operates at the subnet level                                                                                                                                                           |
+| Supports allow rules only                                                                                                                                    | Supports allow rules and deny rules                                                                                                                                                    |
+| Is stateful: Return traffic is automatically allowed, regardless of any rules                                                                                | Is stateless: Return traffic must be explicitly allowed by rules                                                                                                                       |
+| We evaluate all rules before deciding whether to allow traffic                                                                                               | We process rules in order, starting with the lowest numbered rule, when deciding whether to allow traffic                                                                              |
+| Applies to an instance only if someone specifies the security group when launching the instance, or associates the security group with the instance later on | Automatically applies to all instances in the subnets that it's associated with (therefore, it provides an additional layer of defense if the security group rules are too permissive) |
+
+#### EC2 access from the Internet
+
+- EIP or public IP address
+- route table properly configured
 
 ### AWS OpsWorks
 
@@ -388,6 +438,7 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
 ### Amazon EMR
 
 - big data platform for processing vast amounts of data using open source tools such as Apache Spark, Apache Hive, Apache HBase, Apache Flink, Apache Hudi, and Presto.
+- analyzing log files
 
 ### Route 53
 
@@ -416,4 +467,35 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
 
 - ALB - support sni
 - NLB - Can get Elastic IP address assigned
+
+### AWS Direct Connect
+
+- dedicated network connection from your premises to AWS
+
+### AWS Transit Gateway 
+
+- provide a hub and spoke design for connecting VPCs and on-premises networks
+- By attaching a transit gateway to a Direct Connect gateway using a transit virtual interface, you can manage a single connection for multiple VPCs or VPNs that are in the same AWS Region. You can also advertise prefixes from on-premises to AWS and from AWS to on-premises.
+
+### Cloudformation
+
+- Use **CreationPolicy** attribute with a resource to prevent its status from reaching create complete until AWS CloudFormation receives a specified number of success signals or the timeout period is exceeded. To signal a resource, you can use the **cfn-signal** helper script or SignalResource API.
+
+## AXS Private Link
+## Kinesis  data stream versus Firehose
+## Kinesis data stream
+
+By default, the data records are only accessible for 24 hours from the time they are added to a Kinesis stream.
+
+## Kinesis SHarding
+
+### CloudFront
+
+- OAI - Origin Access Identity - prevents users from viewing your S3 files by simply using the direct URL for the file. Instead, they would need to access it through a CloudFront URL.
+- CloudFront signed URLs or signed cookies - allow you to control who can access your content
+- S3 Pre-signed URLs - use the owner’s security credentials to grant others time-limited permission to download or upload objects.
+
+### AWS Backup
+
+- centralized backup service for Aurora, DynamoDB, RDS, FSx,EFS,EBS, Storage Gateway, EC2
 
