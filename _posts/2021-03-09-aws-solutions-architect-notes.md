@@ -50,6 +50,7 @@ tags:
 - **Enhanced Monitoring** - provides metrics in real time for the operating system (OS) that your DB instance runs on, stored for 30 days in the CloudWatch Logs.
 - When **failing over**, Amazon RDS simply flips the canonical name record (CNAME) for your DB instance to point at the standby, which is in turn promoted to become the new primary.
 - increase the disk space **without downtime** - enable storage autoscaling.
+- Asynchronous read replicas over Multi-AZ.
 
 #### Aurora
 
@@ -230,6 +231,7 @@ Amazon MQ supports LDAP authentication and authorization with directory services
 #### EBS Volumes
 
 - Persistant block storage
+- Encrypted with **KMS**.
 - Termination Protection is **turned off** by default, you must turn it on.
 - On an EBS-backed instance, the **default action is for the root EBS volume to be deleted** when the instance is terminated.
 - EBS Root Volumes of your DEFAULT AMI's cannot be encrypted. You can also use a third tool (such as bit locker etc) to encrypt the root volume, or this can be done when creating AMI's (lab to follow) in the AWS console or using the API.
@@ -395,7 +397,7 @@ The Storage Gateway virtual appliance connects directly to your local infrastruc
 - Tape Gateway enables you to replace using physical tapes on-premises with virtual tapes in AWS without changing existing backup workflows.
 - it is not suitable for transferring large sets of data to AWS
 
-- **File Gateway** (nfs) - For flat files, stored directly on S3
+- **File Gateway** (nfs) - For flat files, stored directly on S3. Retrievable immediately within minutes.
 - **Volume Gateway** (isci)
   - **Stored Volumes** - Entire Dataset is stored **on site** and is asynchronously backed up to S3.
   - **Cached Volumes** - Entire Dataset is stored **on S3** and the most frequently accessed data is cached on site
@@ -507,6 +509,13 @@ By default, the data records are only accessible for 24 hours from the time they
 
 - OAI - Origin Access Identity - prevents users from viewing your S3 files by simply using the direct URL for the file. Instead, they would need to access it through a CloudFront URL.
 - CloudFront signed URLs or signed cookies - allow you to control who can access your content
+- Use signed URLs for the following cases:
+  - You want to use an RTMP distribution. Signed cookies aren’t supported for RTMP distributions.
+  - You want to restrict access to individual files, for example, an installation download for your application.
+  - Your users are using a client (for example, a custom HTTP client) that doesn’t support cookies.
+- Use signed cookies for the following cases:
+  - You want to provide access to multiple restricted files, for example, all of the files for a video in HLS format or all of the files in the subscribers’ area of a website.
+  - You don’t want to change your current URLs.
 - S3 Pre-signed URLs - use the owner’s security credentials to grant others time-limited permission to download or upload objects.
 
 ### AWS Backup
