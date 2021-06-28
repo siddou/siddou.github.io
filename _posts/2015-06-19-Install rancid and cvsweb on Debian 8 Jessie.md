@@ -223,6 +223,7 @@ Alias /cvsweb /usr/share/cvsweb
 ```
 ```shell
 a2enmod authnz_ldap
+a2enmod cgid
 systemctl restart apache2
 ```
 
