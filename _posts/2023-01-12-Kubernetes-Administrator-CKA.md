@@ -113,35 +113,82 @@ Store information in the form of documents or pages so each individual gets a do
   - ex. Helper containers (process or fetch data from elsewhere)
   - they communicate together by referring to each other as localhost since they share the same network/storage space
 
+##### Replication Controller
 
-## Commands:
+- **Replication Controller**: older technology
+- **Replica Set**: new recommended way to setup replication
+- monitor the pod and ensure that the specified number of pods are running at all times
+- Create multiple pods to share the load across them
+
+##### Labels and Selectors
+
+- Use label as a filter for replicat set
+
+##### Deployments
+
+- kind: Deployment
+- K8S object that comes higher than Replicat Set
+- Provide capability to upgrade the underlying instances seamlessly using rolling updates, undo changes, and pause, and resume changes as required.
+
+##### Services
+
+- enable communication between component
+- kind: Service
+- **NodePort**: service make makes an internal port accessible on a port on the node.
+- **Cluster IP**: create a virtualIP inside the cluster to enable communication between different services (ex set of frontend to set of backend servers)
+- **Loadbalancer**: distribute load
+
+##### Namespaces
+
+- kind: Service
+- can enable resource quota by namespace
+
+##### Imperative vs Declarative
+
+- **Imperative**: Specify what to do
+- **Declarative**: Specify final destination (ex.IAC tools).
+- "kubectl run"   -> Imperative
+- "kubectl apply -f /path/to/config-files" -> Declarative
+
+
+
+## Commands
+
+List all:
+
+```shell
+kubectl get all
+```
 
 List pods:
+
 ```shell
 kubectl get pods
 ```
 
 Create a new pod:
+
 ```shell
 vim pod.yaml
 ```
+
 ```shell
 apiVersion: v1
 kind: Pod
-
 metadata:
   name: nginx
-
 spec:
   containers:
     - name: nginx
       image: nginx
 ```
+
 ```shell
 kubectl create -f pod.yaml
 ```
 
 Show specific pod:
+
 ```shell
 kubectl describe pod newpods-kblb2
 ```
@@ -153,16 +200,19 @@ kubectl describe pod | grep -B 4 "Node:"
 ```
 
 List replicasets:
+
 ```shell
 kubectl get replicasets
 ```
 
 Delete a pod:
+
 ```shell
 kubectl delete pod new-replica-set-2mpd8
 ```
 
 Create a replicaset:
+
 ```shell
 apiVersion: apps/v1
 kind: ReplicaSet
@@ -188,21 +238,70 @@ kubectl create -f replicaset-definition-1.yaml
 ```
 
 Delete Replicaset
+
 ```shell
 kubectl delete replicaset replicaset-1
 ```
 
 Edit ReplicatSet
+
 ```shell
 kubectl edit replicaset new-replica-set
 ```
 
+Replace or Update ReplicatSet
 
 ```shell
-
+kubectl replace -f replicaset-definition-1.yaml
 ```
 
+Scale ReplicatSet
 
 ```shell
-
+kubectl scale --replicas=5 rs/new-replica-set
 ```
+
+Create an NGINX Pod:
+
+```shell
+kubectl run nginx --image=nginx
+```
+
+Generate POD Manifest YAML file (dry run):
+
+```shell
+kubectl run nginx --image=nginx --dry-run=client -o yaml
+```
+
+Generate Deployment YAML file (dry run):
+
+```shell
+kubectl create deployment --image=nginx nginx --replicas=4 --dry-run=client -o yaml > nginx-deployment.yaml
+```
+
+Defining a Service:
+
+```shell
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app.kubernetes.io/name: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+```
+
+```shell
+kubectl create -f service-definition-1.yaml
+```
+
+List pods on all namespaces:
+
+```shell
+kubectl get pods --all-namespaces | grep blue
+```
+
